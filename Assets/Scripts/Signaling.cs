@@ -1,19 +1,54 @@
+using System.Collections;
 using UnityEngine;
 
 public class Signaling : MonoBehaviour
 {
+    private Trigger _trigger;
     private float _currentVolume = 0f;
     private float _transitionSpeed = 0.1f;
-    private float _volume = 0;
+    private float _maxVolume = 1f;
+    private float _minVolume = 0f;
+    private Coroutine _currentCoroutine;
 
-    private void Update()
+    private void Awake()
     {
-        Sound(_volume);
+        _trigger = GetComponent<Trigger>();
     }
 
-    public void Sound(float volume)
+    private void OnEnable()
     {
-        _volume = volume;
-        _currentVolume = Mathf.MoveTowards(_currentVolume, _volume, _transitionSpeed * Time.deltaTime);
+        _trigger.Triggered += HandleTriggerChange;
+    }
+
+    private void OnDisable()
+    {
+        _trigger.Triggered -= HandleTriggerChange;
+    }
+
+    private void HandleTriggerChange(bool isEntered)
+    {
+        if (_currentCoroutine != null)
+        {
+            StopCoroutine(_currentCoroutine);
+        }
+
+        if (isEntered)
+        {
+            _currentCoroutine = StartCoroutine(Sound(_maxVolume));
+        }
+        else
+        {
+            _currentCoroutine = StartCoroutine(Sound(_minVolume));
+        }
+    }
+
+    public IEnumerator Sound(float volume)
+    {
+        while (Mathf.Approximately(_currentVolume, volume) == false)
+        {
+            _currentVolume = Mathf.MoveTowards(_currentVolume, volume, _transitionSpeed * Time.deltaTime);
+
+            yield return null;
+        }
     }
 }

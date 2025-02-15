@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Mover))]
 public class Rogue : MonoBehaviour
 {
-    [SerializeField] Transform[] _wayPoint;
+    [SerializeField] private Transform[] _wayPoint;
 
     private Mover _mover;
     private int _currentWayPoint = 0;
