@@ -4,7 +4,6 @@ using UnityEngine;
 public class Signaling : MonoBehaviour
 {
     private Trigger _trigger;
-    private Coroutine _currentCoroutine;
     private float _currentVolume = 0f;
     private float _transitionSpeed = 0.1f;
     private float _maxVolume = 1f;
@@ -17,12 +16,14 @@ public class Signaling : MonoBehaviour
 
     private void OnEnable()
     {
-        _trigger.Triggered += HandleTriggerChange;
+        _trigger.OnTriggerEntered += ActiveSound;
+        _trigger.OnTriggerExited += DeactivateSound;
     }
 
     private void OnDisable()
     {
-        _trigger.Triggered -= HandleTriggerChange;
+        _trigger.OnTriggerEntered -= ActiveSound;
+        _trigger.OnTriggerExited -= DeactivateSound;
     }
 
     public IEnumerator Sound(float volume)
@@ -30,25 +31,18 @@ public class Signaling : MonoBehaviour
         while (Mathf.Approximately(_currentVolume, volume) == false)
         {
             _currentVolume = Mathf.MoveTowards(_currentVolume, volume, _transitionSpeed * Time.deltaTime);
-
+            Debug.Log(_currentVolume);
             yield return null;
         }
     }
 
-    private void HandleTriggerChange(bool isEntered)
+    private void ActiveSound(bool isEnter)
     {
-        if (_currentCoroutine != null)
-        {
-            StopCoroutine(_currentCoroutine);
-        }
+        StartCoroutine(Sound(_maxVolume));
+    }
 
-        if (isEntered)
-        {
-            _currentCoroutine = StartCoroutine(Sound(_maxVolume));
-        }
-        else
-        {
-            _currentCoroutine = StartCoroutine(Sound(_minVolume));
-        }
+    private void DeactivateSound(bool isExit)
+    {
+        StartCoroutine(Sound(_minVolume));
     }
 }

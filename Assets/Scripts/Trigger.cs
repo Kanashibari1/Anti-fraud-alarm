@@ -4,15 +4,18 @@ using UnityEngine;
 [RequireComponent(typeof(Signaling))]
 public class Trigger : MonoBehaviour
 {
-    public event Action<bool> Triggered;
+    public event Action<bool> OnTriggerEntered;
+    public event Action<bool> OnTriggerExited;
+    private readonly bool isEnter = true;
+    private readonly bool isExit = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        Triggered.Invoke(true);
+        OnTriggerEntered.Invoke(isEnter);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Triggered.Invoke(false);
+        OnTriggerExited.Invoke(isExit);
     }
 }
