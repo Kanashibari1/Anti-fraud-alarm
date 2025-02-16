@@ -6,7 +6,7 @@ public class Mover : MonoBehaviour
 
     [SerializeField] private float _speed = 3f;
 
-    public void MoveTowardPosition(Transform position)
+    public void Move(Transform position)
     {
         transform.LookAt(position.position);
 

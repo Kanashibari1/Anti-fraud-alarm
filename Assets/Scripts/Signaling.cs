@@ -27,12 +27,12 @@ public class Signaling : MonoBehaviour
         _trigger.RogueLost -= DeactivateSound;
     }
 
-    public IEnumerator Sound(float volume)
+    private IEnumerator FadeVolume(float volume)
     {
         while (Mathf.Approximately(_currentVolume, volume) == false)
         {
             _currentVolume = Mathf.MoveTowards(_currentVolume, volume, _transitionSpeed * Time.deltaTime);
-            Debug.Log(_currentVolume);
+
             yield return null;
         }
     }
@@ -42,7 +42,7 @@ public class Signaling : MonoBehaviour
         if (_coroutine != null)
             StopCoroutine(_coroutine);
 
-        _coroutine = StartCoroutine(Sound(_maxVolume));
+        _coroutine = StartCoroutine(FadeVolume(_maxVolume));
     }
 
     private void DeactivateSound()
@@ -50,6 +50,6 @@ public class Signaling : MonoBehaviour
         if (_coroutine != null)
             StopCoroutine(_coroutine);
 
-        _coroutine = StartCoroutine(Sound(_minVolume));
+        _coroutine = StartCoroutine(FadeVolume(_minVolume));
     }
 }

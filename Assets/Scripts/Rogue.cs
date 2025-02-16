@@ -15,7 +15,7 @@ public class Rogue : MonoBehaviour
 
     private void Update()
     {
-        _mover.MoveTowardPosition(_wayPoint[_currentWayPoint]);
+        _mover.Move(_wayPoint[_currentWayPoint]);
 
         if (_mover.HasReachedTrigger(_wayPoint[_currentWayPoint]) == false)
         {
