@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class Signaling : MonoBehaviour
 {
-    private Trigger _trigger;
+    private Coroutine _coroutine;
+    private RogueDetector _trigger;
     private float _currentVolume = 0f;
     private float _transitionSpeed = 0.1f;
     private float _maxVolume = 1f;
@@ -11,19 +12,19 @@ public class Signaling : MonoBehaviour
 
     private void Awake()
     {
-        _trigger = GetComponent<Trigger>();
+        _trigger = GetComponent<RogueDetector>();
     }
 
     private void OnEnable()
     {
-        _trigger.OnTriggerEntered += ActiveSound;
-        _trigger.OnTriggerExited += DeactivateSound;
+        _trigger.RogueDetected += ActiveSound;
+        _trigger.RogueLost += DeactivateSound;
     }
 
     private void OnDisable()
     {
-        _trigger.OnTriggerEntered -= ActiveSound;
-        _trigger.OnTriggerExited -= DeactivateSound;
+        _trigger.RogueDetected -= ActiveSound;
+        _trigger.RogueLost -= DeactivateSound;
     }
 
     public IEnumerator Sound(float volume)
@@ -36,13 +37,19 @@ public class Signaling : MonoBehaviour
         }
     }
 
-    private void ActiveSound(bool isEnter)
+    private void ActiveSound()
     {
-        StartCoroutine(Sound(_maxVolume));
+        if (_coroutine != null)
+            StopCoroutine(_coroutine);
+
+        _coroutine = StartCoroutine(Sound(_maxVolume));
     }
 
-    private void DeactivateSound(bool isExit)
+    private void DeactivateSound()
     {
-        StartCoroutine(Sound(_minVolume));
+        if (_coroutine != null)
+            StopCoroutine(_coroutine);
+
+        _coroutine = StartCoroutine(Sound(_minVolume));
     }
 }

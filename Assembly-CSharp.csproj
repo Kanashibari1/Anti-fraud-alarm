@@ -61,9 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Mover.cs" />
-    <Compile Include="Assets\Scripts\Trigger.cs" />
     <Compile Include="Assets\Scripts\Signaling.cs" />
     <Compile Include="Assets\Scripts\Rogue.cs" />
+    <Compile Include="Assets\Scripts\RogueDetector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
