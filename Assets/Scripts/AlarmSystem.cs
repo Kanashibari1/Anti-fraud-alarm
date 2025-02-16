@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Signaling : MonoBehaviour
+public class AlarmSystem : MonoBehaviour
 {
     private Coroutine _coroutine;
     private RogueDetector _trigger;

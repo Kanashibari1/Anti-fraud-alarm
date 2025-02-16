@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Signaling))]
+[RequireComponent(typeof(AlarmSystem))]
 public class RogueDetector : MonoBehaviour
 {
     public event Action RogueDetected;
